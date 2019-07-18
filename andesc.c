@@ -130,13 +130,13 @@ int descant(EVENT_HEADER *pheader, void *pevent)
 	unsigned int *data;
 	int words;
 
-	if(        (words = bk_locate(pevent, "GRF0", (DWORD *)&data)) > 0 ){
-	} else if( (words = bk_locate(pevent, "GRF3", (DWORD *)&data)) > 0 ){
-	} else if( (words = bk_locate(pevent, "GRF4", (DWORD *)&data)) > 0 ){
+	fprintf(stderr, "beginning of descant");
+	if(        (words = bk_locate(pevent, "CAEN", (DWORD *)&data)) > 0 ){
 	} else {
 		return(-1);
 	}
 	decode_descant_event(data, words);
+	fprintf(stderr, "end of descant");
 	return SUCCESS;
 }
 
@@ -283,6 +283,7 @@ int decode_descant_event(uint32_t* data, int size)
 				desc_event.energy = data[w++]>>16;
 				if(!(process_decoded_descant(&desc_event))) return -1;
 				memset(&desc_event, 0, sizeof(Desc_event) );
+				fprintf(stderr, "decoded DESCANT event!!!");
 			} // while(w < size)
 		} // for(uint8_t channel = 0; channel < 16; channel += 2)
 	} // for(int board = 0; w < size; ++board)
